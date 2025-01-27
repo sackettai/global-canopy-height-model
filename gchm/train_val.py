@@ -13,6 +13,7 @@ from gchm.utils.loss import get_metric_lookup_dict, SampleWeightedLoss, Shrinkag
 from gchm.utils.preprocessing import compute_train_mean_std
 from gchm.utils.transforms import Normalize, NormalizeVariance
 from gchm.utils.h5_utils import load_paths_from_dicretory, filter_paths_by_tile_names
+from gchm.utils.torch import get_device
 
 
 def run_test(dataset, model_weights, out_dir, trainer):
@@ -213,7 +214,7 @@ if __name__ == "__main__":
     architecture_collection = Architectures(args=args)
     net = architecture_collection(args.architecture)(num_outputs=1)
 
-    net.cuda()  # move model to GPU
+    net.to(get_device())  # move model to GPU if available
 
     # save arguments
     save_args_to_json(file_path=os.path.join(args.out_dir, 'args.json'), args=args)
@@ -243,7 +244,7 @@ if __name__ == "__main__":
 
     # Load latest weights from checkpoint file (alternative load best val epoch from best_weights.pt)
     print('Loading model weights from latest checkpoint ...')
-    checkpoint = torch.load(trainer.checkpoint_path)
+    checkpoint = torch.load(trainer.checkpoint_path, map_location=get_device())
     model_weights = checkpoint['model_state_dict']
 
     # --- test model ---

@@ -1,11 +1,10 @@
+torch
 tables
-ipython
-matplotlib
 numpy
 wandb
 pathlib
 tqdm
-botocore
+boto3
 urllib3
 sentinelhub==3.9.0
 scikit-image

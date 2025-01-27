@@ -18,10 +18,11 @@ from gchm.datasets.dataset_sentinel2_deploy import Sentinel2Deploy
 from gchm.utils.gdal_process import save_array_as_geotif
 from gchm.utils.parser import load_args_from_json, str2bool, str_or_none
 from gchm.utils.aws import download_and_zip_safe_from_aws
+from gchm.utils.torch import get_device
 
 
-DEVICE = torch.device("cuda:0")
-print('DEVICE: ', DEVICE, torch.cuda.get_device_name(0))
+DEVICE = get_device()
+print('DEVICE: ', DEVICE)
 gdal.UseExceptions()
 
 
@@ -241,12 +242,12 @@ if __name__ == "__main__":
     architecture_collection = Architectures(args=args)
     net = architecture_collection(args.architecture)(num_outputs=1)
 
-    net.cuda()  # move model to GPU
+    net = net.to(DEVICE)  # move model to GPU if available
 
     # Load latest weights from checkpoint file (alternative load best val epoch from best_weights.pt)
     print('Loading model weights from latest checkpoint ...')
     checkpoint_path = Path(args.model_dir) / 'checkpoint.pt'
-    checkpoint = torch.load(checkpoint_path)
+    checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
     model_weights = checkpoint['model_state_dict']
 
     pred_dict = predict(model=net, args=args, model_weights=model_weights,

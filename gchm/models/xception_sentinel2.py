@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 from torch.hub import download_url_to_file
 
+from gchm.utils.torch import get_device
 
 def conv3x3(in_channels, out_channels, stride=1, groups=1, dilation=1):
     """3x3 convolution with padding"""
@@ -368,7 +369,7 @@ class XceptionS2(nn.Module):
         return variances
 
     def _load_model_weights(self, model_weights_path):
-        checkpoint = torch.load(model_weights_path)
+        checkpoint = torch.load(model_weights_path, map_location=get_device())
         model_weights = checkpoint['model_state_dict']
         self.load_state_dict(model_weights)
 

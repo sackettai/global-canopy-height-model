@@ -10,10 +10,11 @@ import wandb
 from gchm.utils.transforms import denormalize
 from gchm.utils.loss import filter_nans_from_tensors, get_classification_metrics_lookup
 from gchm.utils.sampler import SliceBatchSampler, SubsetSequentialSampler
+from gchm.utils.torch import get_device
 
 
-DEVICE = torch.device("cuda:0")
-print('DEVICE: ', DEVICE, torch.cuda.get_device_name(0))
+DEVICE = get_device()
+print('DEVICE: ', DEVICE)
 INF = torch.tensor(float('-inf')).to(DEVICE)
 NAN = torch.tensor(float('nan')).to(DEVICE)
 
@@ -170,7 +171,7 @@ class Trainer:
         # load checkpoint if exists
         if self.checkpoint_path.exists():
             print('Found existing checkpoint...')
-            checkpoint = torch.load(self.checkpoint_path)
+            checkpoint = torch.load(self.checkpoint_path, map_location=DEVICE)
 
             # load and update existing model_state_dict (model weights)
             # the update step is needed when the model contains more layers then the loaded pretrained model weights
