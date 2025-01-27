@@ -1,7 +1,10 @@
+import glob
+import os
 import numpy as np
 import tables
 from tqdm import tqdm
 
+from gchm.utils.gdal_process import sort_band_arrays
 
 def load_paths_from_dicretory(dir):
     file_names = glob.glob(dir + '/*.h5')
@@ -111,7 +114,7 @@ def write_patches_to_hdf(hdf5_path, band_arrays, image_date, image_name, latlon_
                       hdf5_file.root[attribute].dtype, hdf5_file.root[attribute].shape)
 
         count_skipped = 0
-        for p_id in band_arrays:
+        for p_id in range(len(band_arrays)):
             # Note: the shape of img, label must be 4-dim (1, patch, patch, channels)
             img_patch = np.expand_dims(sort_band_arrays(band_arrays=band_arrays[p_id]), axis=0)
 
