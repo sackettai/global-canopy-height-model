@@ -10,7 +10,8 @@ def get_metric_lookup_dict():
             'MAE': torch.nn.L1Loss(),
             'ME': MELoss(),
             'GNLL': GaussianNLL(),
-            'LNLL': LaplacianNLL()}
+            'LNLL': LaplacianNLL(),
+            'R2': RSquared()}
 
 
 def get_classification_metrics_lookup():
@@ -290,3 +291,19 @@ class ArgMaxWrapper(nn.Module):
         prediction = torch.argmax(prediction, dim=1, keepdim=prediction.dim()==4)
         return self.fun(target.cpu(), prediction.cpu(), average=average)
 
+
+class RSquared(nn.Module):
+    """
+    Compute the coefficient of determination (R2).
+    """
+    def __init__(self):
+        super(RSquared, self).__init__()
+        self.eps = 1e-8
+
+    def __call__(self, prediction, target):
+        # Ensure inputs are of the same shape
+        assert prediction.shape == target.shape, "Shapes of prediction and target must match"
+        ss_total = torch.sum((target - torch.mean(target)) ** 2)
+        ss_residual = torch.sum((target - prediction) ** 2)
+        r2 = 1 - (ss_residual / (ss_total + self.eps))  # Add epsilon to prevent division by zero
+        return r2

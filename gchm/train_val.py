@@ -65,7 +65,7 @@ if __name__ == "__main__":
                                                                                                      'RT_L_IB',
                                                                                                      'ST_geoshift_IB', 'ST_geoshiftscale_IB'))
         else:
-            print('base_model_dir exsits already')
+            print('base_model_dir exists already')
             print('Layer has been re-initialized in a previous fine-tuning run. Setting args.reinit_last_layer=False.')
             args.reinit_last_layer = False
             args.load_optimizer_state_dict = True
