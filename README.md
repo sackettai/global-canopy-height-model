@@ -197,3 +197,26 @@ Lang, N., Jetz, W., Schindler, K., & Wegner, J. D. (2023). A high-resolution can
 }
 ```
 
+# David's commands
+
+Activate the correct Python environment:
+```
+micromamba activate gchm
+```
+
+```
+python gchm/preprocess/ALS_maxpool_GEDI_footprint.py \
+  "/Users/davidsackett/dev/sackettcolab/gchm-mgmt/datasets/wonthaggi/VIC Government/CHM/1 Metre/e374n5724_wonthaggi2019oct10_chm1m_v10cm_mga55_01_001.tif" \
+  "/Users/davidsackett/dev/sackettcolab/gchm-mgmt/datasets/wonthaggi/chm_gedi_footprint/e374n5724_wonthaggi2019oct10_chm1m_v10cm_mga55_01_001.tif"
+```
+
+```
+python gchm/preprocess/merge_h5_files_per_split.py \
+  "/Users/davidsackett/dev/sackettcolab/gchm-mgmt/datasets/training/GLOBAL_GEDI_2019_2020/parts_shuffled" \
+  "/Users/davidsackett/dev/sackettcolab/gchm-mgmt/datasets/training/GLOBAL_GEDI_2019_2020/merged_shuffled"
+```
+
+Run training job:
+```
+./gchm/bash/run_training.sh
+```

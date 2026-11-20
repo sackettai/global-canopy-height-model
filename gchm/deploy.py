@@ -122,7 +122,8 @@ if __name__ == "__main__":
     args, unknown = parser.parse_known_args()
 
     # sample model id from ensemble
-    args.model_id = np.random.choice(args.num_models)
+    # args.model_id = np.random.choice(args.num_models)
+    args.model_id = 1
     args.model_dir = os.path.join(args.model_dir, "model_{}".format(args.model_id), args.finetune_strategy)
     print("Sampled model_id: {} out of {} models in ensemble.".format(args.model_id, args.num_models))
     print("Using args.model_dir: ", args.model_dir)

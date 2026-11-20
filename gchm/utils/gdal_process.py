@@ -42,7 +42,7 @@ def read_band(path_band, num_retries=10, max_sleep_sec=5):
 
 
 
-def read_sentinel2_bands(data_path, from_aws=False, bucket='sentinel-s2-l2a', channels_last=False):
+def read_sentinel2_bands(data_path, from_aws=False, bucket='sentinel-s2-l2a'):
     bands10m = ['B02', 'B03', 'B04', 'B08']
     bands20m = ['B05', 'B06', 'B07', 'B8A', 'B11', 'B12', 'SCL']
     bands60m = ['B01', 'B09']  # 'B10' is missing in 2A, exists only in 1C
@@ -104,9 +104,7 @@ def read_sentinel2_bands(data_path, from_aws=False, bucket='sentinel-s2-l2a', ch
 
             band_arrays[band_name] = resize(band_array, target_shape, mode='reflect',
                                             order=order, preserve_range=True).astype(np.uint16)
-    print('sorting bands...')
-    image_array = sort_band_arrays(band_arrays=band_arrays, channels_last=channels_last)
-    return image_array, tile_info, band_arrays['SCL'], band_arrays['CLD']
+    return band_arrays, tile_info
 
 
 def to_latlon(x, y, ds):

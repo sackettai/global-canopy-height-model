@@ -2,21 +2,39 @@ name: gchm
 
 channels:
   - conda-forge
-  - defaults
+  # - defaults
+  # -c pytorch
+  # -c nvidia
 
 dependencies:
-  - ipython
-  - matplotlib
-  - numpy
-  - wandb
-  - pathlib
-  - tqdm
-  - botocore
-  - urllib3
-  - wandb
-  - tensorboard
-  - sentinelhub=3.9.0
-  - anaconda::scikit-image
-  - anaconda::scikit-learn
-  - anaconda::typing
-  - anaconda::jupyter
+  - python=3.10.9
+  - gdal=3.6.2
+  # - pytables #=3.7.0
+  # - pytorch 
+  # - numpy
+  # - sentinelhub #=3.9.0
+  # - pathlib
+  # - tqdm
+  # - botocore
+  # - urllib3
+  # - tensorboard
+  # - torchvision
+  # - torchaudio
+  # - cudatoolkit=11.8
+
+ 
+  # - ipython
+  # - matplotlib
+  # 
+  # - wandb
+  # - pathlib
+  # - tqdm
+  # - botocore
+  # - urllib3
+  # - wandb
+  # - tensorboard
+  # - sentinelhub=3.9.0
+  # - anaconda::scikit-image
+  # - anaconda::scikit-learn
+  # - anaconda::typing
+  # - anaconda::jupyter

@@ -3,7 +3,7 @@ from torch.utils.data import Dataset, DataLoader, ConcatDataset
 import numpy as np
 import math
 
-from gchm.utils.gdal_process import read_sentinel2_bands, create_latlon_mask, get_reference_band_ds_gdal
+from gchm.utils.gdal_process import read_sentinel2_bands, create_latlon_mask, get_reference_band_ds_gdal, sort_band_arrays
 
 
 class Sentinel2Deploy(Dataset):
@@ -29,7 +29,14 @@ class Sentinel2Deploy(Dataset):
         self.patch_size = patch_size
         self.border = border
         self.patch_size_no_border = self.patch_size - 2 * self.border
-        self.image, self.tile_info, self.scl, self.cloud = read_sentinel2_bands(data_path=self.path, from_aws=self.from_aws, channels_last=True)
+        band_arrays, self.tile_info = read_sentinel2_bands(data_path=self.path, from_aws=self.from_aws)
+
+        # moved creation of image out of read_sentinel2_bands so that band_arrays can be
+        # used to create the training dataset
+        print('sorting bands...')
+        self.image = sort_band_arrays(band_arrays=band_arrays, channels_last=True)
+        self.scl, self.cloud = band_arrays['SCL'], band_arrays['CLD']
+        
         self.image_shape_original = self.image.shape
         # pad the image with channels in last dimension
         self.image = np.pad(self.image, ((self.border, self.border), (self.border, self.border), (0, 0)), mode='symmetric')

@@ -109,7 +109,9 @@ class Sentinel2PatchesH5(Dataset):
         data_dict = {'inputs': inputs,
                      'labels_mean': labels_mean,
                      'labels_var': labels_var,
-                     'labels_inv_var': 1/labels_var}
+                     # removed due to divide by zero errors. It does not appear to be used in any code.
+                     #'labels_inv_var': 1/labels_var
+                     }
 
         if self.path_bin_weights is not None:
             data_dict[self.weight_key] = sample_weights
