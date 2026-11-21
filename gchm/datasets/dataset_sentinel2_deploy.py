@@ -127,11 +127,17 @@ class Sentinel2Deploy(Dataset):
             y_topleft = self.patch_coords_dict[index]['y_topleft']
             x_topleft = self.patch_coords_dict[index]['x_topleft']
 
-            tile[:, y_topleft+self.border:y_topleft + self.patch_size - self.border,
-                 x_topleft+self.border:x_topleft + self.patch_size - self.border] \
-                = patches[index, :,
-                          self.border:self.patch_size - self.border,
-                          self.border:self.patch_size - self.border]
+            try:
+                tile[:, y_topleft+self.border:y_topleft + self.patch_size - self.border,
+                    x_topleft+self.border:x_topleft + self.patch_size - self.border] \
+                    = patches[index, :,
+                            self.border:self.patch_size - self.border,
+                            self.border:self.patch_size - self.border]
+            except ValueError as e:
+                raise ValueError(
+                    f"patch {index} at (y={y_topleft}, x={x_topleft}) does not fit the tile "
+                    f"{tuple(tile.shape)} (patch_size={self.patch_size}, border={self.border})"
+                ) from e
 
         # remove padding to return original tile size
         tile = tile[:, self.border:-self.border, self.border:-self.border]
